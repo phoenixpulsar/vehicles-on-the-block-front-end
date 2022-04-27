@@ -13,6 +13,7 @@
 
 <script>
 // @ is an alias to /src
+import { mapActions } from "vuex";
 import Login from "@/components/Login.vue";
 import Vehicle from "@/components/Vehicle.vue";
 import ActionMessage from "@/components/ActionMessage.vue";
@@ -33,6 +34,12 @@ export default {
     AddServiceForm,
     EditVehicleForm,
     EditVehicleServiceForm,
+  },
+  methods: {
+    ...mapActions(["initStore"]),
+  },
+  mounted() {
+    this.initStore();
   },
 };
 </script>
