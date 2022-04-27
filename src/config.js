@@ -1,4 +1,5 @@
-const CONTRACT_NAME = process.env.CONTRACT_NAME || "TODO_ADD_CONTRACT_HERE";
+const CONTRACT_NAME =
+  process.env.CONTRACT_NAME || "vehiclesontheblock001.phoenixpulsar.testnet";
 
 function getConfig(env) {
   switch (env) {
