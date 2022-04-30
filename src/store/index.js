@@ -10,6 +10,12 @@ export default createStore({
     SET_NEAR_CONFIG: (state, nearConfig) => {
       state.nearConfig = nearConfig;
     },
+    SET_NEAR_CONNECTION: (state, nearConnection) => {
+      state.nearConnection = nearConnection;
+    },
+    SET_ACCOUNT_STATE: (state, accountState) => {
+      state.accountState = accountState;
+    },
   },
   actions: {
     _setConfig: ({ commit }) => {
@@ -24,9 +30,72 @@ export default createStore({
         console.error("Error setting NEAR Config", error);
       }
     },
+    _connectToNear: async ({ commit, state }) => {
+      try {
+        let nearConnection = await nearAPI.connect(state.nearConfig);
+        console.log("nearConnectin", nearConnection);
+        commit("SET_NEAR_CONNECTION", nearConnection);
+      } catch (error) {
+        console.error("Error connecting to NEAR", error);
+      }
+    },
+    _fetchState: async ({ commit, state }) => {
+      try {
+        // Fetch State
+        const response = await state.nearConnection.connection.provider.query({
+          prefix_base64: "",
+          finality: "final",
+          account_id: state.nearConfig.contractName,
+          request_type: "view_state",
+        });
+
+        // Decode
+        let storage = {};
+        response.values.forEach((v) => {
+          let decodedKey = atob(v.key);
+          let decodedVal = atob(v.value);
+          storage[decodedKey] = JSON.parse(decodedVal);
+        });
+
+        // Data Structures
+        let vehicles = [];
+        let services = [];
+
+        // Populate Data Structures
+        for (const [key, value] of Object.entries(storage)) {
+          if (key.startsWith("v:")) {
+            let vehicleToAdd = {
+              fullid: key,
+              ...value,
+            };
+            vehicles.push(vehicleToAdd);
+          }
+          if (key.startsWith("vs:")) {
+            let serviceToAdd = {
+              fullid: key,
+              ...value,
+            };
+            services.push(serviceToAdd);
+          }
+        }
+
+        // Create object to store
+        let accountState = {
+          vehicles: vehicles,
+          services: services,
+        };
+
+        // Update Vuex State
+        commit("SET_ACCOUNT_STATE", accountState);
+      } catch (error) {
+        console.error("Error connecting to NEAR", error);
+      }
+    },
     initStore: async ({ dispatch }) => {
       console.log("Init Store In progres...");
       dispatch("_setConfig");
+      await dispatch("_connectToNear");
+      await dispatch("_fetchState");
     },
   },
   modules: {},
