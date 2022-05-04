@@ -1,6 +1,15 @@
 <template>
   <div class="home">
     <Login></Login>
+    <div v-if="!GET_IS_USER_LOGGED_IN">
+      <button @click="signInUsingStore()">Sign In with NEAR Wallet</button>
+    </div>
+    <div v-if="GET_IS_USER_LOGGED_IN">
+      <button @click="signOutUsingStore()">Sign Out</button>
+    </div>
+    <div v-if="GET_IS_USER_LOGGED_IN">
+      Welcome, {{ GET_USER_ACCOUNT_DETAILS?.accountId }}
+    </div>
     <div
       v-for="(vehicle, index) in contractState.vehicles"
       :key="index"
@@ -42,13 +51,23 @@ export default {
     EditVehicleServiceForm,
   },
   computed: {
-    ...mapGetters(["GET_CONTRACT_STATE"]),
+    ...mapGetters([
+      "GET_CONTRACT_STATE",
+      "GET_IS_USER_LOGGED_IN",
+      "GET_USER_ACCOUNT_DETAILS",
+    ]),
     contractState() {
       return this.GET_CONTRACT_STATE;
     },
   },
   methods: {
-    ...mapActions(["initStore"]),
+    ...mapActions(["initStore", "signIn", "signOut"]),
+    signInUsingStore() {
+      this.signIn();
+    },
+    signOutUsingStore() {
+      this.signOut();
+    },
   },
   mounted() {
     this.initStore();
