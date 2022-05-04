@@ -1,7 +1,13 @@
 <template>
   <div class="home">
     <Login></Login>
-    <Vehicle></Vehicle>
+    <div
+      v-for="(vehicle, index) in contractState.vehicles"
+      :key="index"
+      class="vehicle-box"
+    >
+      <Vehicle :vehicle="vehicle"></Vehicle>
+    </div>
     <ActionMessage></ActionMessage>
     <VehicleService></VehicleService>
     <AddVehicleForm></AddVehicleForm>
@@ -13,7 +19,7 @@
 
 <script>
 // @ is an alias to /src
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import Login from "@/components/Login.vue";
 import Vehicle from "@/components/Vehicle.vue";
 import ActionMessage from "@/components/ActionMessage.vue";
@@ -34,6 +40,12 @@ export default {
     AddServiceForm,
     EditVehicleForm,
     EditVehicleServiceForm,
+  },
+  computed: {
+    ...mapGetters(["GET_CONTRACT_STATE"]),
+    contractState() {
+      return this.GET_CONTRACT_STATE;
+    },
   },
   methods: {
     ...mapActions(["initStore"]),

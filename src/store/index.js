@@ -5,6 +5,11 @@ import * as nearAPI from "near-api-js";
 export default createStore({
   state: {
     nearConfig: null,
+    nearConnection: null,
+    accountState: {
+      vehicles: [],
+      services: [],
+    },
   },
   mutations: {
     SET_NEAR_CONFIG: (state, nearConfig) => {
@@ -15,6 +20,14 @@ export default createStore({
     },
     SET_ACCOUNT_STATE: (state, accountState) => {
       state.accountState = accountState;
+    },
+    GET_CONTRACT_STATE: (state) => {
+      return state.accountState;
+    },
+  },
+  getters: {
+    GET_CONTRACT_STATE: (state) => {
+      return state.accountState;
     },
   },
   actions: {
@@ -33,7 +46,6 @@ export default createStore({
     _connectToNear: async ({ commit, state }) => {
       try {
         let nearConnection = await nearAPI.connect(state.nearConfig);
-        console.log("nearConnectin", nearConnection);
         commit("SET_NEAR_CONNECTION", nearConnection);
       } catch (error) {
         console.error("Error connecting to NEAR", error);
