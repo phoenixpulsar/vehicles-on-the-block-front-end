@@ -13,6 +13,7 @@ export default createStore({
     walletConnection: null,
     isUserLoggedIn: null,
     accountDetails: null,
+    contract: null,
   },
   mutations: {
     SET_NEAR_CONFIG: (state, nearConfig) => {
@@ -26,6 +27,9 @@ export default createStore({
     },
     SET_WALLET_CONNECTION: (state, walletConnection) => {
       state.walletConnection = walletConnection;
+    },
+    SET_CONTRACT: (state, contract) => {
+      state.contract = contract;
     },
   },
   getters: {
@@ -147,6 +151,102 @@ export default createStore({
     },
     getAccountDetails: async ({ state }) => {
       state.accountDetails = await state.walletConnection.account();
+    },
+    getContract: async ({ commit, state }) => {
+      let config = getConfig(process.env.NODE_ENV || "development");
+      let contract = new nearAPI.Contract(
+        // the account object that is connecting
+        state.accountDetails,
+        // name of contract you're connecting to
+        config.contractName,
+        {
+          // view methods do not change state but usually return a value
+          viewMethods: [],
+          // change methods modify state
+          changeMethods: [
+            "add_vehicle",
+            "update_vehicle",
+            "delete_vehicle",
+            "add_vehicle_service",
+            "update_vehicle_service",
+            "delete_vehicle_service",
+          ],
+          // account object to initialize and sign transactions.
+          sender: state.account,
+        }
+      );
+      commit("SET_CONTRACT", contract);
+    },
+    addVehicle: async ({ state, dispatch }, vehicleToAdd) => {
+      if (state.contract === null) {
+        await dispatch("getContract");
+      }
+      console.log("add ve", vehicleToAdd);
+      let res = await state.contract.add_vehicle(vehicleToAdd);
+
+      console.log("res from adding", res);
+      // wait for block (1 sec~), to be safe we wait for 2 sec
+      setTimeout(() => {
+        dispatch("_fetchState");
+      }, 2000);
+    },
+    updateVehicle: async ({ state, dispatch }, vehicleToUpdate) => {
+      if (state.contract === null) {
+        await dispatch("getContract");
+      }
+      let res = await state.contract.update_vehicle(vehicleToUpdate);
+
+      console.log("res from updatinging", res);
+
+      dispatch("_fetchState");
+    },
+    updateVehicleService: async ({ state, dispatch }, serviceToUpdate) => {
+      if (state.contract === null) {
+        await dispatch("getContract");
+      }
+      let res = await state.contract.update_vehicle_service(serviceToUpdate);
+
+      console.log("res from updatinging servi", res);
+
+      dispatch("_fetchState");
+    },
+    deleteVehicle: async ({ state, dispatch }, vehicleToDelete) => {
+      if (state.contract === null) {
+        await dispatch("getContract");
+      }
+
+      let res = await state.contract.delete_vehicle({
+        vehicleId: vehicleToDelete.id,
+      });
+
+      console.log("res from deleting vehicle", res);
+
+      dispatch("_fetchState");
+    },
+    deleteService: async ({ state, dispatch }, serviceToDeleteId) => {
+      if (state.contract === null) {
+        await dispatch("getContract");
+      }
+
+      let res = await state.contract.delete_vehicle_service({
+        vehicleServiceId: serviceToDeleteId,
+      });
+
+      console.log("res from deleting service", res);
+
+      dispatch("_fetchState");
+    },
+    addService: async ({ state, dispatch }, serviceToAdd) => {
+      if (state.contract === null) {
+        await dispatch("getContract");
+      }
+      await state.contract.add_vehicle_service({
+        vehicleId: serviceToAdd.vehicleId,
+        serviceDate: serviceToAdd.serviceDate,
+        serviceNotes: serviceToAdd.serviceNotes,
+      });
+
+      dispatch("_fetchState");
     },
     initStore: async ({ dispatch }) => {
       console.log("Init Store In progres...");
