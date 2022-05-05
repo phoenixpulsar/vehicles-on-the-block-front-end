@@ -10,19 +10,17 @@
     <div v-if="GET_IS_USER_LOGGED_IN">
       Welcome, {{ GET_USER_ACCOUNT_DETAILS?.accountId }}
     </div>
-    <div
-      v-for="(vehicle, index) in contractState.vehicles"
-      :key="index"
-      class="vehicle-box"
-    >
+    <AddVehicleForm></AddVehicleForm>
+    <div v-for="(vehicle, index) in contractState.vehicles" :key="index">
       <Vehicle :vehicle="vehicle"></Vehicle>
+      <AddServiceForm :vehicleId="vehicle.id"></AddServiceForm>
+      <EditVehicleForm></EditVehicleForm>
+    </div>
+    <div v-for="(vehicleService, index) in contractState.services" :key="index">
+      <VehicleService :vehicleService="vehicleService"></VehicleService>
+      <EditVehicleServiceForm></EditVehicleServiceForm>
     </div>
     <ActionMessage></ActionMessage>
-    <VehicleService></VehicleService>
-    <AddVehicleForm></AddVehicleForm>
-    <AddServiceForm></AddServiceForm>
-    <EditVehicleForm></EditVehicleForm>
-    <EditVehicleServiceForm></EditVehicleServiceForm>
   </div>
 </template>
 

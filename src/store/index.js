@@ -246,7 +246,9 @@ export default createStore({
         serviceNotes: serviceToAdd.serviceNotes,
       });
 
-      dispatch("_fetchState");
+      setTimeout(() => {
+        dispatch("_fetchState");
+      }, 2000);
     },
     initStore: async ({ dispatch }) => {
       console.log("Init Store In progres...");

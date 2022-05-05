@@ -1,6 +1,6 @@
 <template>
-  <div class="edd-vehicle-service-form">
-    <h1>Add Vehicle Service Form</h1>
+  <div class="add-vehicle-service-form">
+    <h1>Add Vehicle Form</h1>
     <div>
       <input type="text" v-model="make" placeholder="Make" />
     </div>

@@ -13,6 +13,7 @@
 // @ is an alias to /src
 export default {
   name: "Vehicle",
+
   props: {
     vehicle: Object,
   },
