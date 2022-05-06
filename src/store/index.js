@@ -196,9 +196,11 @@ export default createStore({
       }
       let res = await state.contract.update_vehicle(vehicleToUpdate);
 
-      console.log("res from updatinging", res);
+      console.log("res from updating", res);
 
-      dispatch("_fetchState");
+      setTimeout(() => {
+        dispatch("_fetchState");
+      }, 2000);
     },
     updateVehicleService: async ({ state, dispatch }, serviceToUpdate) => {
       if (state.contract === null) {
@@ -206,9 +208,11 @@ export default createStore({
       }
       let res = await state.contract.update_vehicle_service(serviceToUpdate);
 
-      console.log("res from updatinging servi", res);
+      console.log("res from updating servi", res);
 
-      dispatch("_fetchState");
+      setTimeout(() => {
+        dispatch("_fetchState");
+      }, 2000);
     },
     deleteVehicle: async ({ state, dispatch }, vehicleToDelete) => {
       if (state.contract === null) {

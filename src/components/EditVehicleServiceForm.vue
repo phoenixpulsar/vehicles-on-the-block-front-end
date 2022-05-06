@@ -1,16 +1,57 @@
 <template>
   <div class="edit-vehicle-service-form">
-    <h1>Edit Vehicle Service Form</h1>
+    <input
+      type="text"
+      :value="vehicleService.serviceDate"
+      @change="serviceDate = $event.target.value"
+      placeholder="Service Date"
+    />
+
+    <textarea
+      type="text"
+      rows="3"
+      :value="vehicleService.serviceNotes"
+      @change="serviceNotes = $event.target.value"
+      placeholder="Service Notes"
+    />
   </div>
+
+  <button @click="callUpdateVehicleService()">Update Service</button>
 </template>
+
 <script>
-// @ is an alias to /src
+import { mapActions } from "vuex";
 export default {
   name: "EditVehicleServiceForm",
-  data() {
-    return {};
+  props: {
+    vehicleService: Object,
   },
-  methods: {},
+  data() {
+    return {
+      serviceDate: null,
+      serviceNotes: null,
+    };
+  },
+  methods: {
+    ...mapActions(["updateVehicleService"]),
+    callUpdateVehicleService() {
+      let serviceToUpdate = {
+        vehicleServiceId: this.vehicleService.id,
+        vehicleId: this.vehicleService.vehicleId,
+        serviceDate:
+          this.serviceDate !== null
+            ? this.serviceDate
+            : this.vehicleService.serviceDate,
+        serviceNotes:
+          this.serviceNotes !== null
+            ? this.serviceNotes
+            : this.vehicleService.serviceNotes,
+      };
+      this.updateVehicleService(serviceToUpdate);
+    },
+  },
 };
 </script>
-<style lang="scss" scoped></style>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss"></style>

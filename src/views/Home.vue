@@ -14,11 +14,13 @@
     <div v-for="(vehicle, index) in contractState.vehicles" :key="index">
       <Vehicle :vehicle="vehicle"></Vehicle>
       <AddServiceForm :vehicleId="vehicle.id"></AddServiceForm>
-      <EditVehicleForm></EditVehicleForm>
+      <EditVehicleForm :vehicle="vehicle"></EditVehicleForm>
     </div>
     <div v-for="(vehicleService, index) in contractState.services" :key="index">
       <VehicleService :vehicleService="vehicleService"></VehicleService>
-      <EditVehicleServiceForm></EditVehicleServiceForm>
+      <EditVehicleServiceForm
+        :vehicleService="vehicleService"
+      ></EditVehicleServiceForm>
     </div>
     <ActionMessage></ActionMessage>
   </div>
