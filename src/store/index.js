@@ -224,8 +224,9 @@ export default createStore({
       });
 
       console.log("res from deleting vehicle", res);
-
-      dispatch("_fetchState");
+      setTimeout(() => {
+        dispatch("_fetchState");
+      }, 2000);
     },
     deleteService: async ({ state, dispatch }, serviceToDeleteId) => {
       if (state.contract === null) {
@@ -237,8 +238,9 @@ export default createStore({
       });
 
       console.log("res from deleting service", res);
-
-      dispatch("_fetchState");
+      setTimeout(() => {
+        dispatch("_fetchState");
+      }, 2000);
     },
     addService: async ({ state, dispatch }, serviceToAdd) => {
       if (state.contract === null) {

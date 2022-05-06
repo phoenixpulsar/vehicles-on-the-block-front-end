@@ -13,11 +13,15 @@
     <AddVehicleForm></AddVehicleForm>
     <div v-for="(vehicle, index) in contractState.vehicles" :key="index">
       <Vehicle :vehicle="vehicle"></Vehicle>
+      <button @click="callDeleteVehicle(vehicle)">Delete Vehicle</button>
       <AddServiceForm :vehicleId="vehicle.id"></AddServiceForm>
       <EditVehicleForm :vehicle="vehicle"></EditVehicleForm>
     </div>
     <div v-for="(vehicleService, index) in contractState.services" :key="index">
       <VehicleService :vehicleService="vehicleService"></VehicleService>
+      <button @click="callDeleteService(vehicleService.id)">
+        Delete Service
+      </button>
       <EditVehicleServiceForm
         :vehicleService="vehicleService"
       ></EditVehicleServiceForm>
@@ -61,12 +65,24 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["initStore", "signIn", "signOut"]),
+    ...mapActions([
+      "initStore",
+      "signIn",
+      "signOut",
+      "deleteVehicle",
+      "deleteService",
+    ]),
     signInUsingStore() {
       this.signIn();
     },
     signOutUsingStore() {
       this.signOut();
+    },
+    callDeleteVehicle(vehicle) {
+      this.deleteVehicle(vehicle);
+    },
+    callDeleteService(serviceId) {
+      this.deleteService(serviceId);
     },
   },
   mounted() {

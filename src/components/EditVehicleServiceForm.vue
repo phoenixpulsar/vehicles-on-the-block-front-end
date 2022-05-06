@@ -1,19 +1,22 @@
 <template>
   <div class="edit-vehicle-service-form">
-    <input
-      type="text"
-      :value="vehicleService.serviceDate"
-      @change="serviceDate = $event.target.value"
-      placeholder="Service Date"
-    />
-
-    <textarea
-      type="text"
-      rows="3"
-      :value="vehicleService.serviceNotes"
-      @change="serviceNotes = $event.target.value"
-      placeholder="Service Notes"
-    />
+    <div>
+      <input
+        type="text"
+        :value="vehicleService.serviceDate"
+        @change="serviceDate = $event.target.value"
+        placeholder="Service Date"
+      />
+    </div>
+    <div>
+      <textarea
+        type="text"
+        rows="3"
+        :value="vehicleService.serviceNotes"
+        @change="serviceNotes = $event.target.value"
+        placeholder="Service Notes"
+      />
+    </div>
   </div>
 
   <button @click="callUpdateVehicleService()">Update Service</button>
