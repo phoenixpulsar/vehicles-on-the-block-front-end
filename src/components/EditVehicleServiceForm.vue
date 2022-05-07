@@ -51,6 +51,7 @@ export default {
             : this.vehicleService.serviceNotes,
       };
       this.updateVehicleService(serviceToUpdate);
+      this.$emit("openActionMssg");
     },
   },
 };

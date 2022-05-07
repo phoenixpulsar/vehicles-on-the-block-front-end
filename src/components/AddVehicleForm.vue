@@ -50,6 +50,7 @@ export default {
       };
       this.addVehicle(vehicleToAdd);
       this.resetForm();
+      this.$emit("openActionMssg");
     },
     resetForm() {
       this.year = "";

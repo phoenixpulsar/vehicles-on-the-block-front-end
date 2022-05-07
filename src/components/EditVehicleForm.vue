@@ -92,6 +92,7 @@ export default {
       };
 
       this.updateVehicle(vehicleToUpdate);
+      this.$emit("openActionMssg");
     },
   },
 };

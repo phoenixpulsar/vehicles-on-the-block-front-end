@@ -37,6 +37,12 @@ export default {
         serviceNotes: this.serviceNotes,
       };
       this.addService(serviceToAdd);
+      this.$emit("openActionMssg");
+      this.resetForm();
+    },
+    resetForm() {
+      this.serviceDate = "";
+      this.serviceNotes = "";
     },
   },
   props: {
