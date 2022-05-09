@@ -181,10 +181,9 @@ export default createStore({
       if (state.contract === null) {
         await dispatch("getContract");
       }
-      console.log("add ve", vehicleToAdd);
-      let res = await state.contract.add_vehicle(vehicleToAdd);
 
-      console.log("res from adding", res);
+      await state.contract.add_vehicle(vehicleToAdd);
+
       // wait for block (1 sec~), to be safe we wait for 2 sec
       setTimeout(() => {
         dispatch("_fetchState");
@@ -194,9 +193,7 @@ export default createStore({
       if (state.contract === null) {
         await dispatch("getContract");
       }
-      let res = await state.contract.update_vehicle(vehicleToUpdate);
-
-      console.log("res from updating", res);
+      await state.contract.update_vehicle(vehicleToUpdate);
 
       setTimeout(() => {
         dispatch("_fetchState");
@@ -206,9 +203,7 @@ export default createStore({
       if (state.contract === null) {
         await dispatch("getContract");
       }
-      let res = await state.contract.update_vehicle_service(serviceToUpdate);
-
-      console.log("res from updating servi", res);
+      await state.contract.update_vehicle_service(serviceToUpdate);
 
       setTimeout(() => {
         dispatch("_fetchState");
@@ -219,11 +214,10 @@ export default createStore({
         await dispatch("getContract");
       }
 
-      let res = await state.contract.delete_vehicle({
+      await state.contract.delete_vehicle({
         vehicleId: vehicleToDelete.id,
       });
 
-      console.log("res from deleting vehicle", res);
       setTimeout(() => {
         dispatch("_fetchState");
       }, 2000);
@@ -233,11 +227,10 @@ export default createStore({
         await dispatch("getContract");
       }
 
-      let res = await state.contract.delete_vehicle_service({
+      await state.contract.delete_vehicle_service({
         vehicleServiceId: serviceToDeleteId,
       });
 
-      console.log("res from deleting service", res);
       setTimeout(() => {
         dispatch("_fetchState");
       }, 2000);
